@@ -17,24 +17,39 @@ gunworks_player.png,Gunworks MC,male,Brown,None,pancakeey,Gunworks,2023,gamemake
 mimi.png,Mimi,female,None,Black,slayervictor,Mimi the Mimic,2026,gamemaker,action|roguelike
 mimi_adventurer.png,Adventurer,male,Brown,Green,slayervictor,Mimi the Mimic,2026,gamemaker,action|roguelike
 gluttony.png,Gluttony,female,Purple,Purple,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+sloth.png,Sloth,female,Black,Black,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
 madness.png,Madness,male,Red,Red,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+mask_bro.png,Mask Bro,unknown,Unknown,Unknown,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+demi_demon.png,Cultist,unknown,Unknown,None,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
 occult_player.png,Occult Case MC,male,Brown,None,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
 peacekeeper.png,Peacekeeper,unknown,Unknown,Unknown,slayervictor,Peacekeepers,2020,gamemaker,action|platformer
 gladiator.png,Gladiator,male,Unknown,Unknown,slayervictor,ReFight,2025,gamemaker,action|fighting
 marshmallow.png,Marshmallow,male,Black,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
 naomi.png,Naomi,female,Blue,Green,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
 yukari.png,Yukari,female,Brown,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+fairy_princess.png,Fairy Princess,female,Pink,Red,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+irori.png,Irori,female,White,Rainbow,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+kiina.png,Kiina,female,Pink,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+kiyu.png,Kiyu,female,White,Red,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+mei.png,Mei,female,Brown,Yellow,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+noriko.png,Noriko,female,Black,Black,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+yuki.png,Yuki,female,White,Blue,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+rat.png,Rat,unknown,White,Red,tacecaps,Snake Escape,2023,gamemaker,action|strategy
+leaper.png,Rift Leaper MC,unknown,None,Black,tacecaps,Rift Leaper,2024,gamemaker,platformer
+morning_knight.png,Knight Antivirus,other,None,None,tacecaps,Morning Star,2023,gamemaker,action|roguelike
 speed.png,Speed Gunner,male,Unknown,Green,slayervictor,Speed Gunner,2021,gamemaker,action|roguelike
 teacher.png,Teacher,female,Brown,Grey,tacecaps,Scarfcat,2022,gamemaker,platformer|narrative
 mika.png,Mika Kurosaki,female,Brown,Red,tacecaps,Scarfcat|Wildfront,2022,gamemaker,platformer|action|rpg|narrative
 boop.png,Slime,other,None,White,tacecaps,Sticky Mechanic,2026,gamemaker,platformer|narrative
 aria.png,Aria Palmer,female,Black,Red,tacecaps,Sticky Mechanic,2026,gamemaker,platformer|narrative
-akari.png,Akari Sakai,female,Brown,Pink,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
-hibiki_wf.png,Hibiki Kiriyama,female,Red,Purple,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
-yuuna.png,Yuuna Shirokawa,female,Purple,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
-chiwa.png,Chiwa Nishimiya,female,Blonde,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
-baru.png,Baru,male,Black,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
-kenji.png,Kenji Hoshino,male,Brown,Green,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+akari.png,Akari Sakai,female,Brown,Pink,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+hibiki_wf.png,Hibiki Kiriyama,female,Red,Purple,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+yuuna.png,Yuuna Shirokawa,female,Purple,Blue,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+chiwa.png,Chiwa Nishimiya,female,Blonde,Blue,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+baru.png,Baru,male,Black,Blue,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+kenji.png,Kenji Hoshino,male,Brown,Green,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+tamomo.png,Tamomo,male,Black,Orange,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
+kyouka.png,Kyouka,female,Black,Green,tacecaps,Wildfront,2023,gamemaker,action|rpg|narrative
 nugiman.png,Nugiman,male,Brown,Brown,pancakeey,Nugifact,2021,gamemaker,adventure|rpg
 chibichan.png,Chibi-Chan,female,Blonde,Blue,slayervictor|tacecaps,wAIfu,2023,pyqt,tool
 sonic.png,Sonic,male,Blue,Green,tacecaps,go-sonic,2026,godot,action|adventure|platformer
@@ -44,3 +59,11 @@ limit.png,Limit MC,unknown,Unknown,Unknown,pancakeey,Limit,2021,gamemaker,action
 monsteralchemy.png,Monster Alchemy MC,unknown,Unknown,Unknown,pancakeey,Monster Alchemy,2020,gamemaker,strategy|turnbased
 dragonskeep.png,Dragons Keep MC,male,Unknown,Unknown,pancakeey,Dragons Keep,2020,gamemaker,platformer
 azusa.png,Azusa,female,Pink,Purple,slayervictor,Bladewitch,2025,gamemaker,adventure|rpg|action
+hibiki_princess.png,Hibiki,female,Pink,Red,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
+hikari.png,Hikari,female,White,Red,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
+ryuuko.png,Ryuuko,female,Red,Purple,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+tori.png,Tori,female,Green,Orange,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+ume.png,Ume,female,Pink,Green,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
+vaeren.png,Vaeren,female,Black,Red,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
+virin.png,Virin,female,Black,Purple,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
+yorimi.png,Yorimi,female,Blonde,Orange,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
