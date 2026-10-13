@@ -67,7 +67,8 @@ enum Genre {
   narrative('Narrative'),
   rhythm('Rhythm'),
   tool('Tool'),
-  sandbox('Sandbox');
+  sandbox('Sandbox'),
+  shooter('Shooter');
 
   const Genre(this.displayName);
 
