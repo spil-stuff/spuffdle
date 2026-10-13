@@ -1,0 +1,37 @@
+image,name,gender,hair,eye,developers,games,year,engine,genres
+aquapact_player.png,Aquapact MC,female,Blonde,Purple,pancakeey,Aquapact,2026,gamemaker,action|rpg
+chrono_man.png,Chrono Keep MC,male,Brown,Black,pancakeey,Chrono Keep,2025,gamemaker,turnbased
+corrupted_man.png,Corrupted Depths MC,male,Brown,None,slayervictor,Corrupted Depths,2024,gamemaker,simulation
+elf.png,Elf,female,Blonde,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+ghost.png,Ghost,other,None,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+mayuko.png,Mayuko,female,Purple,Orange,tacecaps,Don't Drink That!|Rubea|Infinite Horizon,2025,gamemaker,simulation|narrative
+ogre.png,Bort,male,None,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+princess.png,Princess,female,Blue,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+vampire.png,Vampire,male,Black,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+werewolf.png,Werewolf,male,Grey,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
+kyle.png,Kyle,male,Pink,Blue,slayervictor,Descendia Remastered,2020,gamemaker,action|adventure|rpg
+tomoe.png,Tomoe,female,Brown,Green,slayervictor,Descendia Remastered,2020,gamemaker,action|adventure|rpg
+will.png,Wilbur,male,Brown,Black,pancakeey,Enchanted,2020,gamemaker,action|roguelike
+father.png,Father,male,None,None,tacecaps|slayervictor|pancakeey,Faint,2022,gamemaker,platformer
+gunworks_player.png,Gunworks MC,male,Brown,None,pancakeey,Gunworks,2023,gamemaker,action|platformer
+mimi.png,Mimi,female,None,Black,slayervictor,Mimi the Mimic,2026,gamemaker,action|roguelike
+mimi_adventurer.png,Adventurer,male,Brown,Green,slayervictor,Mimi the Mimic,2026,gamemaker,action|roguelike
+gluttony.png,Gluttony,female,Purple,Purple,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+madness.png,Madness,male,Red,Red,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+occult_player.png,Occult Case MC,male,Brown,None,pancakeey,The Occult Case,2024,gamemaker,action|roguelike
+peacekeeper.png,Peacekeeper,unknown,Unknown,Unknown,slayervictor,Peacekeepers,2020,gamemaker,action|platformer
+gladiator.png,Gladiator,male,Unknown,Unknown,slayervictor,ReFight,2025,gamemaker,action|fighting
+marshmallow.png,Marshmallow,male,Black,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+naomi.png,Naomi,female,Blue,Green,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+yukari.png,Yukari,female,Brown,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
+speed.png,Speed Gunner,male,Unknown,Green,slayervictor,Speed Gunner,2021,gamemaker,action|roguelike
+teacher.png,Teacher,female,Brown,Grey,tacecaps,Scarfcat,2022,gamemaker,platformer|narrative
+mika.png,Mika Kurosaki,female,Brown,Red,tacecaps,Scarfcat|Wildfront,2022,gamemaker,platformer|action|rpg|narrative
+boop.png,Slime,other,None,White,tacecaps,Sticky Mechanic,2026,gamemaker,platformer|narrative
+aria.png,Aria Palmer,female,Black,Red,tacecaps,Sticky Mechanic,2026,gamemaker,platformer|narrative
+akari.png,Akari Sakai,female,Brown,Pink,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+hibiki_wf.png,Hibiki Kiriyama,female,Red,Purple,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+yuuna.png,Yuuna Shirokawa,female,Purple,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+chiwa.png,Chiwa Nishimiya,female,Blonde,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+baru.png,Baru,male,Black,Blue,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
+kenji.png,Kenji,male,Brown,Green,tacecaps,Wildfront,null,gamemaker,action|rpg|narrative
