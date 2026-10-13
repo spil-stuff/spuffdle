@@ -1,8 +1,9 @@
 import 'dart:math';
-
+import 'dart:convert';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 
 enum Gender {
@@ -37,7 +38,9 @@ enum Engine {
   unity('Unity'),
   godot('Godot'),
   unreal('Unreal'),
-  custom('Custom');
+  custom('Custom'),
+  pyqt('PyQt'),
+  pygame('Pygame');
 
   const Engine(this.displayName);
 
@@ -62,7 +65,9 @@ enum Genre {
   fighting('Fighting'),
   horror('Horror'),
   narrative('Narrative'),
-  rhythm('Rhythm');
+  rhythm('Rhythm'),
+  tool('Tool'),
+  sandbox('Sandbox');
 
   const Genre(this.displayName);
 
@@ -103,15 +108,15 @@ class QuizElement {
     required this.engine,
     required this.genres,
   }) : categories = [
-          QuizElementCategory<String>(name),
-          QuizElementCategory<Gender>(gender),
-          QuizElementCategory<String>(hairColor),
-          QuizElementCategory<String>(eyeColor),
-          QuizElementCategory<List<Developer>>(developers),
-          QuizElementCategory<List<String>>(games),
-          QuizElementCategory<int?>(year),
-          QuizElementCategory<List<Engine>>(engine),
-          QuizElementCategory<List<Genre>>(genres),
+         QuizElementCategory<String>(name),
+         QuizElementCategory<Gender>(gender),
+         QuizElementCategory<String>(hairColor),
+         QuizElementCategory<String>(eyeColor),
+         QuizElementCategory<List<Developer>>(developers),
+         QuizElementCategory<List<String>>(games),
+         QuizElementCategory<int?>(year),
+         QuizElementCategory<List<Engine>>(engine),
+         QuizElementCategory<List<Genre>>(genres),
        ];
 
   final String imagePath;
@@ -125,10 +130,7 @@ class QuizElement {
   final List<Engine> engine;
   final List<Genre> genres;
 
-  Image get image => Image.asset(
-        imagePath,
-        fit: BoxFit.cover,
-      );
+  Image get image => Image.asset(imagePath, fit: BoxFit.cover);
 
   List<QuizElementCategory> categories;
 
@@ -140,17 +142,14 @@ class QuizElement {
 
         if (list2.every((element) => list1.contains(element))) {
           categories[i].matches = QuizElementCategoryMatch.yes;
-        } 
-        else if (list2.any((element) => list1.contains(element))) {
+        } else if (list2.any((element) => list1.contains(element))) {
           categories[i].matches = QuizElementCategoryMatch.partial;
         } else {
           categories[i].matches = QuizElementCategoryMatch.no;
         }
-      }
-      else if (categories[i].value == other.categories[i].value) {
+      } else if (categories[i].value == other.categories[i].value) {
         categories[i].matches = QuizElementCategoryMatch.yes;
-      }
-      else {
+      } else {
         categories[i].matches = QuizElementCategoryMatch.no;
       }
     }
@@ -166,7 +165,10 @@ class Quiz {
 }
 
 class AsyncProvider with ChangeNotifier {
+  static const String _dailyProgressKey = 'dailyQuizProgress';
+
   List<QuizElement> quizElements = [];
+  Quiz? dailyQuiz;
   bool isLoading = true;
   bool isInitialized = false;
 
@@ -292,6 +294,8 @@ class AsyncProvider with ChangeNotifier {
       parsedElements.sort((a, b) => a.name.compareTo(b.name));
 
       quizElements = parsedElements;
+      isInitialized = true;
+      dailyQuiz = await _loadDailyQuiz();
     } finally {
       isLoading = false;
       isInitialized = true;
@@ -315,21 +319,116 @@ class AsyncProvider with ChangeNotifier {
     );
   }
 
-  Quiz getDailyQuiz() {
+  Quiz createQuiz(bool isDaily) {
     if (!isInitialized) {
       throw StateError('Quiz elements have not been loaded yet.');
     }
 
-    Random random = Random();
+    final random = isDaily
+        ? Random(
+            DateTime.now().year * 10000 +
+                DateTime.now().month * 100 +
+                DateTime.now().day,
+          )
+        : Random();
+
     QuizElement answer = quizElements[random.nextInt(quizElements.length)];
     return Quiz(answer: answer);
+  }
+
+  String _todayKey() {
+    final now = DateTime.now();
+    final month = now.month.toString().padLeft(2, '0');
+    final day = now.day.toString().padLeft(2, '0');
+    return '${now.year}-$month-$day';
+  }
+
+  Future<Quiz> _loadDailyQuiz() async {
+    final preferences = await SharedPreferences.getInstance();
+    final savedProgress = preferences.getString(_dailyProgressKey);
+    if (savedProgress != null) {
+      final decoded = jsonDecode(savedProgress);
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException('Saved daily quiz progress is invalid.');
+      }
+
+      if (decoded['date'] == _todayKey()) {
+        final answerName = decoded['answer'];
+        if (answerName is! String) {
+          throw const FormatException('Saved daily quiz answer is invalid.');
+        }
+        final answer = quizElements.where((item) => item.name == answerName);
+        if (answer.isEmpty) {
+          throw FormatException(
+            'Saved daily quiz answer "$answerName" is not in the quiz data.',
+          );
+        }
+
+        final quiz = Quiz(answer: answer.first);
+        final savedGuesses = decoded['guesses'];
+        if (savedGuesses is! List) {
+          throw const FormatException('Saved daily quiz guesses are invalid.');
+        }
+        for (final name in savedGuesses) {
+          if (name is! String) {
+            throw const FormatException(
+              'Saved daily quiz contains an invalid guess.',
+            );
+          }
+          final guessedElement = quizElements.where(
+            (item) => item.name == name,
+          );
+          if (guessedElement.isEmpty) {
+            throw FormatException(
+              'Saved daily guess "$name" is not in the quiz data.',
+            );
+          }
+          guess(quiz, guessedElement.first);
+        }
+        if (decoded['completed'] == true) {
+          quiz.completed = true;
+          guess(quiz, quiz.answer);
+        }
+        return quiz;
+      }
+    }
+
+    final quiz = createQuiz(true);
+    await _saveDailyQuiz(quiz);
+    return quiz;
+  }
+
+  Future<void> _saveDailyQuiz(Quiz quiz) async {
+    final preferences = await SharedPreferences.getInstance();
+    final saved = await preferences.setString(
+      _dailyProgressKey,
+      jsonEncode({
+        'date': _todayKey(),
+        'answer': quiz.answer.name,
+        'guesses': quiz.guesses.map((element) => element.name).toList(),
+        'completed': quiz.completed,
+      }),
+    );
+    if (!saved) {
+      throw StateError('Could not save daily quiz progress.');
+    }
+  }
+
+  Future<void> submitGuess(
+    Quiz quiz,
+    QuizElement selected, {
+    required bool isDaily,
+  }) async {
+    guess(quiz, selected);
+    if (isDaily) {
+      await _saveDailyQuiz(quiz);
+    }
   }
 
   void guess(Quiz quiz, QuizElement guess) {
     if (quiz.answer == guess) {
       quiz.completed = true;
-    }
-    else {
+    } else {
       quiz.guesses.add(guess);
     }
 
