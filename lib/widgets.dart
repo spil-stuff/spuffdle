@@ -131,10 +131,7 @@ class QuizPageState extends State<QuizPage> {
                 QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
                 QuizElementCategoryLabelWidget(label: 'Name', width: 200),
                 QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
-                QuizElementCategoryLabelWidget(
-                  label: 'Hair Colour',
-                  width: 100,
-                ),
+                QuizElementCategoryLabelWidget(label: 'Hair Colour', width: 100),
                 QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
                 QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
                 QuizElementCategoryLabelWidget(label: 'Games', width: 200),
