@@ -4,27 +4,55 @@ import 'package:provider/provider.dart';
 import 'provider.dart';
 import 'constants.dart';
 
-// ignore: must_be_immutable
 class QuizPage extends StatefulWidget {
-  QuizPage({super.key, required this.quiz});
+  const QuizPage({super.key, required this.quiz, required this.isDaily});
 
   final Quiz quiz;
-  List<QuizElementWidget> quizElementWidgets = [];
+  final bool isDaily;
 
   @override
   State<QuizPage> createState() => QuizPageState();
 }
 
 class QuizPageState extends State<QuizPage> {
-  void guess(QuizElement guess) {
-    final asyncProvider = Provider.of<AsyncProvider>(context, listen: false);
-    asyncProvider.guess(widget.quiz, guess);
+  late Quiz _quiz;
+  late bool _isDaily;
+  late List<QuizElement> _shownGuesses;
 
-    if (!widget.quiz.completed) {
-      widget.quizElementWidgets.add(QuizElementWidget(quizElement: guess));
+  @override
+  void initState() {
+    super.initState();
+    _quiz = widget.quiz;
+    _isDaily = widget.isDaily;
+    _shownGuesses = List<QuizElement>.of(_quiz.guesses);
+  }
+
+  Future<void> guess(QuizElement guess) async {
+    final asyncProvider = Provider.of<AsyncProvider>(context, listen: false);
+    final submission = asyncProvider.submitGuess(
+      _quiz,
+      guess,
+      isDaily: _isDaily,
+    );
+
+    if (!_quiz.completed) {
+      _shownGuesses.add(guess);
     }
 
     setState(() {});
+    await submission;
+  }
+
+  void _selectGameMode(bool isDaily, {bool closeDrawer = true}) {
+    final provider = Provider.of<AsyncProvider>(context, listen: false);
+    setState(() {
+      _isDaily = isDaily;
+      _quiz = isDaily ? provider.dailyQuiz! : provider.createQuiz(false);
+      _shownGuesses = List<QuizElement>.of(_quiz.guesses);
+    });
+    if (closeDrawer) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -33,8 +61,39 @@ class QuizPageState extends State<QuizPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.primaryBackgroundColor,
+      drawer: Drawer(
+        backgroundColor: AppColors.secondaryBackgroundColor,
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text('Game mode', style: AppStyles.whiteText),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.today, color: AppColors.primaryColor),
+                title: const Text('Daily mode', style: AppStyles.whiteText),
+                selected: _isDaily,
+                onTap: () => _selectGameMode(true),
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.all_inclusive,
+                  color: AppColors.primaryColor,
+                ),
+                title: const Text('Infinite mode', style: AppStyles.whiteText),
+                selected: !_isDaily,
+                onTap: () => _selectGameMode(false),
+              ),
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
-        title: const Text('spuffdle', style: AppStyles.whiteText),
+        title: Text('spuffdle ${widget.isDaily ? "Daily" : "Infinite"}', style: AppStyles.whiteText),
         backgroundColor: AppColors.primaryBackgroundColor,
         iconTheme: IconThemeData(color: AppColors.primaryColor),
       ),
@@ -44,12 +103,13 @@ class QuizPageState extends State<QuizPage> {
           children: [
             SizedBox(
               width: 400,
-              child: widget.quiz.completed
+              child: _quiz.completed
                   ? const SizedBox(height: 50)
                   : QuizElementGuessingMenu(
+                      key: ValueKey(_isDaily),
                       elements: asyncProvider.quizElements
                           .where(
-                            (element) => !widget.quiz.guesses.contains(element),
+                            (element) => !_quiz.guesses.contains(element),
                           )
                           .toList(),
                       onSelected: guess,
@@ -71,9 +131,21 @@ class QuizPageState extends State<QuizPage> {
                 QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
               ],
             ),
-            if (widget.quiz.completed)
-              QuizElementWidget(quizElement: widget.quiz.answer),
-            ...widget.quizElementWidgets.reversed,
+            if (_quiz.completed)
+              QuizElementWidget(quizElement: _quiz.answer),
+            ..._shownGuesses.reversed.map(
+              (guess) => QuizElementWidget(quizElement: guess),
+            ),
+            if (_quiz.completed && !_isDaily)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: FilledButton.icon(
+                  onPressed: () =>
+                      _selectGameMode(false, closeDrawer: false),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('New game'),
+                ),
+              ),
           ],
         ),
       ),

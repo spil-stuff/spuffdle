@@ -67,7 +67,7 @@ class MainAppState extends State<MainApp> {
       ),
       home: asyncProvider.isLoading
           ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : QuizPage(quiz: asyncProvider.getDailyQuiz()),
+          : QuizPage(quiz: asyncProvider.dailyQuiz!, isDaily: true),
     );
   }
 }
