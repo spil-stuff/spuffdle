@@ -15,6 +15,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class QuizPageState extends State<QuizPage> {
+  final ScrollController _guessesScrollController = ScrollController();
   late Quiz _quiz;
   late bool _isDaily;
   late List<QuizElement> _shownGuesses;
@@ -25,6 +26,12 @@ class QuizPageState extends State<QuizPage> {
     _quiz = widget.quiz;
     _isDaily = widget.isDaily;
     _shownGuesses = List<QuizElement>.of(_quiz.guesses);
+  }
+
+  @override
+  void dispose() {
+    _guessesScrollController.dispose();
+    super.dispose();
   }
 
   Future<void> guess(QuizElement guess) async {
@@ -58,6 +65,7 @@ class QuizPageState extends State<QuizPage> {
   @override
   Widget build(BuildContext context) {
     final asyncProvider = Provider.of<AsyncProvider>(context);
+    final guesses = _shownGuesses.reversed.toList();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.primaryBackgroundColor,
@@ -93,7 +101,10 @@ class QuizPageState extends State<QuizPage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('spuffdle ${widget.isDaily ? "Daily" : "Infinite"}', style: AppStyles.whiteText),
+        title: Text(
+          'spuffdle ${_isDaily ? "Daily" : "Infinite"}',
+          style: AppStyles.whiteText,
+        ),
         backgroundColor: AppColors.primaryBackgroundColor,
         iconTheme: IconThemeData(color: AppColors.primaryColor),
       ),
@@ -108,9 +119,7 @@ class QuizPageState extends State<QuizPage> {
                   : QuizElementGuessingMenu(
                       key: ValueKey(_isDaily),
                       elements: asyncProvider.quizElements
-                          .where(
-                            (element) => !_quiz.guesses.contains(element),
-                          )
+                          .where((element) => !_quiz.guesses.contains(element))
                           .toList(),
                       onSelected: guess,
                     ),
@@ -131,19 +140,29 @@ class QuizPageState extends State<QuizPage> {
                 QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
               ],
             ),
-            if (_quiz.completed)
-              QuizElementWidget(quizElement: _quiz.answer),
-            ..._shownGuesses.reversed.map(
-              (guess) => QuizElementWidget(quizElement: guess),
+            if (_quiz.completed) QuizElementWidget(quizElement: _quiz.answer),
+            Expanded(
+              child: guesses.isEmpty
+                  ? const SizedBox.shrink()
+                  : Scrollbar(
+                      controller: _guessesScrollController,
+                      thumbVisibility: true,
+                      child: ListView.builder(
+                        controller: _guessesScrollController,
+                        padding: const EdgeInsets.only(bottom: 8),
+                        itemCount: guesses.length,
+                        itemBuilder: (context, index) =>
+                            QuizElementWidget(quizElement: guesses[index]),
+                      ),
+                    ),
             ),
             if (_quiz.completed && !_isDaily)
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: FilledButton.icon(
-                  onPressed: () =>
-                      _selectGameMode(false, closeDrawer: false),
+                  onPressed: () => _selectGameMode(false, closeDrawer: false),
                   icon: const Icon(Icons.refresh),
-                  label: const Text('New game'),
+                  label: const Text('New character'),
                 ),
               ),
           ],
@@ -252,60 +271,60 @@ class _QuizElementGuessingMenuState extends State<QuizElementGuessingMenu> {
                     width: menuWidth,
                     height: menuHeight,
                     child: results.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'No matching characters',
-                            style: AppStyles.greyText,
-                          ),
-                        )
-                      : Scrollbar(
-                          controller: _resultsScrollController,
-                          thumbVisibility: true,
-                          child: ListView.builder(
+                        ? const Center(
+                            child: Text(
+                              'No matching characters',
+                              style: AppStyles.greyText,
+                            ),
+                          )
+                        : Scrollbar(
                             controller: _resultsScrollController,
-                            padding: EdgeInsets.zero,
-                            itemExtent: _optionHeight,
-                            itemCount: results.length,
-                            itemBuilder: (context, index) {
-                              final element = results[index];
-                              return InkWell(
-                                onTap: () {
-                                  widget.onSelected(element);
-                                  _searchController.clear();
-                                  _dismiss();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 6,
+                            thumbVisibility: true,
+                            child: ListView.builder(
+                              controller: _resultsScrollController,
+                              padding: EdgeInsets.zero,
+                              itemExtent: _optionHeight,
+                              itemCount: results.length,
+                              itemBuilder: (context, index) {
+                                final element = results[index];
+                                return InkWell(
+                                  onTap: () {
+                                    widget.onSelected(element);
+                                    _searchController.clear();
+                                    _dismiss();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 6,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                          child: Image.asset(
+                                            element.imagePath,
+                                            width: 36,
+                                            height: 36,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            element.name,
+                                            style: AppStyles.whiteText,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          4,
-                                        ),
-                                        child: Image.asset(
-                                          element.imagePath,
-                                          width: 36,
-                                          height: 36,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          element.name,
-                                          style: AppStyles.whiteText,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
-                        ),
                   ),
                 ),
               ),

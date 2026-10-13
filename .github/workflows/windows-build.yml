@@ -1,0 +1,32 @@
+name: Build Windows Desktop App
+
+on:
+  push:
+    branches:
+      - main # change to master or desired branch
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true # caches pub dependencies and Flutter SDK for faster builds
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Build for Windows
+        run: flutter build windows --release
+
+      - name: Upload Windows executable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app-release
+          path: build/windows/x64/runner/Release/
