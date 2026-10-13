@@ -19,6 +19,7 @@ class QuizPageState extends State<QuizPage> {
   late Quiz _quiz;
   late bool _isDaily;
   late List<QuizElement> _shownGuesses;
+  final Set<QuizElement> _pendingGuessReveals = {};
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class QuizPageState extends State<QuizPage> {
 
     if (!_quiz.completed) {
       _shownGuesses.add(guess);
+      _pendingGuessReveals.add(guess);
     }
 
     setState(() {});
@@ -56,6 +58,7 @@ class QuizPageState extends State<QuizPage> {
       _isDaily = isDaily;
       _quiz = isDaily ? provider.dailyQuiz! : provider.createQuiz(false);
       _shownGuesses = List<QuizElement>.of(_quiz.guesses);
+      _pendingGuessReveals.clear();
     });
     if (closeDrawer) {
       Navigator.pop(context);
@@ -131,7 +134,10 @@ class QuizPageState extends State<QuizPage> {
                 QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
                 QuizElementCategoryLabelWidget(label: 'Name', width: 200),
                 QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
-                QuizElementCategoryLabelWidget(label: 'Hair Colour', width: 100),
+                QuizElementCategoryLabelWidget(
+                  label: 'Hair Colour',
+                  width: 100,
+                ),
                 QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
                 QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
                 QuizElementCategoryLabelWidget(label: 'Games', width: 200),
@@ -151,8 +157,27 @@ class QuizPageState extends State<QuizPage> {
                         controller: _guessesScrollController,
                         padding: const EdgeInsets.only(bottom: 8),
                         itemCount: guesses.length,
-                        itemBuilder: (context, index) =>
-                            QuizElementWidget(quizElement: guesses[index]),
+                        findChildIndexCallback: (key) {
+                          if (key is ObjectKey) {
+                            final index = guesses.indexWhere(
+                              (guess) => identical(guess, key.value),
+                            );
+                            return index == -1 ? null : index;
+                          }
+                          return null;
+                        },
+                        itemBuilder: (context, index) {
+                          final guess = guesses[index];
+                          final reveal = _pendingGuessReveals.contains(guess);
+                          return QuizElementWidget(
+                            key: ObjectKey(guess),
+                            quizElement: guess,
+                            reveal: reveal,
+                            onRevealStarted: reveal
+                                ? () => _pendingGuessReveals.remove(guess)
+                                : null,
+                          );
+                        },
                       ),
                     ),
             ),
@@ -391,53 +416,83 @@ class QuizElementCategoryLabelWidget extends StatelessWidget {
   }
 }
 
-class QuizElementWidget extends StatelessWidget {
-  const QuizElementWidget({super.key, required this.quizElement});
+class QuizElementWidget extends StatefulWidget {
+  const QuizElementWidget({
+    super.key,
+    required this.quizElement,
+    this.reveal = false,
+    this.onRevealStarted,
+  });
 
   final QuizElement quizElement;
+  final bool reveal;
+  final VoidCallback? onRevealStarted;
+
+  @override
+  State<QuizElementWidget> createState() => _QuizElementWidgetState();
+}
+
+class _QuizElementWidgetState extends State<QuizElementWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _revealController;
+  bool _hasStartedReveal = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _revealController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1600),
+    );
+    if (widget.reveal) {
+      _startReveal();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant QuizElementWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.reveal && !_hasStartedReveal) {
+      _startReveal();
+    }
+  }
+
+  void _startReveal() {
+    _hasStartedReveal = true;
+    widget.onRevealStarted?.call();
+    _revealController.forward();
+  }
+
+  @override
+  void dispose() {
+    _revealController.dispose();
+    super.dispose();
+  }
+
+  Widget _category(int index, double width) {
+    return QuizElementCategoryWidget(
+      category: widget.quizElement.categories[index],
+      width: width,
+      revealAnimation: _hasStartedReveal ? _revealController : null,
+      revealIndex: index,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        QuizElementImageWidget(quizElement: quizElement),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[0],
-          width: 200,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[1],
-          width: 100,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[2],
-          width: 100,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[3],
-          width: 100,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[4],
-          width: 110,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[5],
-          width: 200,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[6],
-          width: 100,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[7],
-          width: 100,
-        ),
-        QuizElementCategoryWidget(
-          category: quizElement.categories[8],
-          width: 100,
-        ),
+        QuizElementImageWidget(quizElement: widget.quizElement),
+        _category(0, 200),
+        _category(1, 100),
+        _category(2, 100),
+        _category(3, 100),
+        _category(4, 110),
+        _category(5, 200),
+        _category(6, 100),
+        _category(7, 100),
+        _category(8, 100),
       ],
     );
   }
@@ -477,10 +532,14 @@ class QuizElementCategoryWidget<T> extends StatefulWidget {
     super.key,
     required this.category,
     required this.width,
+    this.revealAnimation,
+    this.revealIndex = 0,
   });
 
   final QuizElementCategory<T> category;
   final double width;
+  final Animation<double>? revealAnimation;
+  final int revealIndex;
 
   @override
   State<QuizElementCategoryWidget<T>> createState() =>
@@ -491,7 +550,7 @@ class QuizElementCategoryWidgetState<T>
     extends State<QuizElementCategoryWidget<T>> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final card = Container(
       width: widget.width,
       height: 100,
       padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
@@ -522,6 +581,35 @@ class QuizElementCategoryWidgetState<T>
                   .toList(),
         ),
       ),
+    );
+
+    final animation = widget.revealAnimation;
+    if (animation == null) {
+      return card;
+    }
+
+    return AnimatedBuilder(
+      animation: animation,
+      child: card,
+      builder: (context, child) {
+        const stagger = 0.075;
+        const flipDuration = 0.2;
+        final progress =
+            ((animation.value - widget.revealIndex * stagger) / flipDuration)
+                .clamp(0.0, 1.0)
+                .toDouble();
+        final rotation =
+            (1 - Curves.easeInOutCubic.transform(progress)) *
+            (3.141592653589793 / 2);
+
+        return Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateY(rotation),
+          child: child,
+        );
+      },
     );
   }
 }

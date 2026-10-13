@@ -4,6 +4,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
 import 'constants.dart';
 
 enum Gender {
@@ -141,7 +142,9 @@ class QuizElement {
         List<dynamic> list1 = categories[i].value as List<dynamic>;
         List<dynamic> list2 = other.categories[i].value as List<dynamic>;
 
-        if (list2.every((element) => list1.contains(element))) {
+        final unorderedEq = const UnorderedIterableEquality();
+
+        if (unorderedEq.equals(list1, list2)) {
           categories[i].matches = QuizElementCategoryMatch.yes;
         } else if (list2.any((element) => list1.contains(element))) {
           categories[i].matches = QuizElementCategoryMatch.partial;
