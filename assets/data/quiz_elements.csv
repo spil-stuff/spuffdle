@@ -40,12 +40,12 @@ morning_knight.png,Knight Antivirus,other,None,None,Morning Star
 speed.png,Speed Gunner,male,Unknown,Green,Speed Gunner
 teacher.png,Teacher,female,Brown,Grey,Scarfcat
 mika.png,Mika Kurosaki,female,Brown,Red,Scarfcat|Wildfront
-boop.png,Slime,other,None,White,Sticky Mechanic
+boop.png,Slime,other,None,White,Sticky Mechanic|Mimi the Mimic
 aria.png,Aria Palmer,female,Black,Red,Sticky Mechanic
 akari.png,Akari Sakai,female,Brown,Pink,Wildfront
 hibiki_wf.png,Hibiki Kiriyama,female,Red,Purple,Wildfront
 yuuna.png,Yuuna Shirokawa,female,Purple,Blue,Wildfront
-chiwa.png,Chiwa Nishimiya,female,Blonde,Blue,Wildfront
+chiwa.png,Chiwa Nishimiya,female,Blonde,Blue,Wildfront|Scarfcat
 baru.png,Baru,male,Black,Blue,Wildfront
 kenji.png,Kenji Hoshino,male,Brown,Green,Wildfront
 tamomo.png,Tamomo,male,Black,Orange,Wildfront
@@ -56,7 +56,7 @@ sonic.png,Sonic,male,Blue,Green,go-sonic
 fenrier.png,Fenrier Goldenhorn,male,Blonde,Orange,Nugifact
 spacejourney.png,Space Journey MC,male,Brown,Black,Space Journey
 limit.png,Limit MC,unknown,Unknown,Unknown,Limit
-monsteralchemy.png,Monster Alchemy MC,unknown,Unknown,Unknown,Monster Alchemy
+monsteralchemy.png,Monster Alchemist,male,Unknown,White,Monster Alchemy
 dragonskeep.png,Dragons Keep MC,male,Unknown,Unknown,Dragons Keep
 azusa.png,Azusa,female,Pink,Purple,Bladewitch
 hibiki_princess.png,Hibiki,female,Pink,Red,Infinite Horizon
@@ -69,18 +69,26 @@ virin.png,Virin,female,Black,Purple,Infinite Horizon
 yorimi.png,Yorimi,female,Blonde,Orange,Infinite Horizon
 purgatory_man.png,Purgatory Chase MC,male,Brown,None,Purgatory Chase
 death.png,Death,unknown,Unknown,Unknown,Purgatory Chase
-mizuko.png,Mizuko,female,Green,Purple,Pocket Waifu
-eiko.png,Eiko,female,Purple,Purple,Pocket Waifu
-koriko.png,Koriko,female,Blue,Blue,Pocket Waifu
-bouka.png,Bouka,female,Red,Pink,Pocket Waifu
+mizuko.png,Mizuko,female,Green,Purple,Monster Alchemy|Pocket Waifu
+eiko.png,Eiko,female,Purple,Purple,Monster Alchemy|Pocket Waifu
+koriko.png,Koriko,female,Blue,Blue,Monster Alchemy|Pocket Waifu
+bouka.png,Bouka,female,Red,Pink,Rubea|Pocket Waifu
 goomie.png,Goomie,female,Green,Green,Descendia Remastered|Pocket Waifu
-shizeko.png,Shizeko,female,Brown,Green,Pocket Waifu
-shoko.png,Shoko,female,Brown,Brown,Pocket Waifu
-celeste.png,Celeste,female,Blue,Blue,Pocket Waifu
-wattan.png,Wattan,female,Red,Red,Pocket Waifu
+shizeko.png,Shizeko,female,Brown,Green,Monster Alchemy|Pocket Waifu
+shoko.png,Shoko,female,Brown,Brown,Monster Alchemy|Pocket Waifu
+celeste.png,Celeste,female,Blue,Blue,Monster Alchemy|Pocket Waifu
+wattan.png,Wattan,female,Red,Red,Monster Alchemy|Pocket Waifu
 yui.png,Yui,female,Brown,Green,Pocket Waifu
 kaede.png,Kaede,female,White,Red,Sw1tch|Pocket Waifu
 suou.png,Suou,female,Pink,Red,Pocket Waifu
 azusa_pw.png,Azusa,female,Blonde,Blue,Pocket Waifu
-shippo.png,Shippo,female,Orange,Blue,Pocket Waifu
-homura.png,Homura,female,Orange,Orange,Pocket Waifu
+shippo.png,Shippo,female,Orange,Blue,Monster Alchemy|Pocket Waifu
+homura.png,Homura,female,Orange,Orange,Monster Alchemy|Pocket Waifu
+rebekka.png,Rebekka,female,Orange,Brown,Summoner's Rift
+tanya.png,Tanya,female,Brown,Orange,Summoner's Rift
+lisa.png,Lisa,female,Yellow,Brown,Summoner's Rift
+summoner.png,Summoner,male,Brown,Purple,Summoner's Rift
+guy.png,Guy,male,Red,Red,Summoner's Rift
+shopkeeper.png,Shopkeeper,male,Purple,Purple,Summoner's Rift
+onionguy.png,Onion Guy,other,None,Grey,Nugifact|Mimi the Mimic
+aquapole.png,Aquapole,other,None,Black,Aquapact|Mimi the Mimic
