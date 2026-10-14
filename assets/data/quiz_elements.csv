@@ -4,13 +4,13 @@ chrono_man.png,Chrono Keep MC,male,Brown,Black,pancakeey,Chrono Keep,2025,gamema
 corrupted_man.png,Corrupted Depths MC,male,Brown,None,slayervictor,Corrupted Depths,2024,gamemaker,simulation
 elf.png,Elf,female,Blonde,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
 ghost.png,Ghost,other,None,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
-mayuko.png,Mayuko,female,Purple,Orange,tacecaps,Don't Drink That!|Rubea|Infinite Horizon,2025,gamemaker,simulation|narrative
+mayuko.png,Mayuko,female,Purple,Orange,tacecaps,Don't Drink That!|Rubea|Infinite Horizon|Pocket Waifu,2025,gamemaker,simulation|narrative|action|adventure|rpg|gacha|idle
 ogre.png,Bort,male,None,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
 princess.png,Princess,female,Blue,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
 vampire.png,Vampire,male,Black,Red,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
 werewolf.png,Werewolf,male,Grey,Unknown,tacecaps,Don't Drink That!,2025,gamemaker,simulation|narrative
 kyle.png,Kyle,male,Pink,Blue,slayervictor,Descendia Remastered,2020,gamemaker,action|adventure|rpg
-tomoe.png,Tomoe,female,Brown,Green,slayervictor,Descendia Remastered,2020,gamemaker,action|adventure|rpg
+tomoe.png,Tomoe,female,Brown,Green,slayervictor|tacecaps,Descendia Remastered|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
 will.png,Wilbur,male,Brown,Black,pancakeey,Enchanted,2020,gamemaker,action|roguelike
 father.png,Father,male,None,None,tacecaps|slayervictor|pancakeey,Faint,2022,gamemaker,platformer
 gunworks_player.png,Gunworks MC,male,Brown,None,pancakeey,Gunworks,2023,gamemaker,action|platformer
@@ -25,15 +25,15 @@ occult_player.png,Occult Case MC,male,Brown,None,pancakeey,The Occult Case,2024,
 peacekeeper.png,Peacekeeper,unknown,Unknown,Unknown,slayervictor,Peacekeepers,2020,gamemaker,action|platformer
 gladiator.png,Gladiator,male,Unknown,Unknown,slayervictor,ReFight,2025,gamemaker,action|fighting
 marshmallow.png,Marshmallow,male,Black,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
-naomi.png,Naomi,female,Blue,Green,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+naomi.png,Naomi,female,Blue,Green,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
 yukari.png,Yukari,female,Brown,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
-fairy_princess.png,Fairy Princess,female,Pink,Red,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
-irori.png,Irori,female,White,Rainbow,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
-kiina.png,Kiina,female,Pink,Red,tacecaps,Rubea|Infinite Horizon,2020,gamemaker,action|adventure|rpg
-kiyu.png,Kiyu,female,White,Red,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
-mei.png,Mei,female,Brown,Yellow,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+fairy_princess.png,Fairy Princess,female,Pink,Red,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
+irori.png,Irori,female,White,Rainbow,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
+kiina.png,Kiina,female,Pink,Red,tacecaps,Rubea|Infinite Horizon|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
+kiyu.png,Kiyu,female,White,Red,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
+mei.png,Mei,female,Brown,Yellow,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
 noriko.png,Noriko,female,Black,Black,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
-yuki.png,Yuki,female,White,Blue,tacecaps,Rubea,2020,gamemaker,action|adventure|rpg
+yuki.png,Yuki,female,White,Blue,tacecaps,Rubea|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
 rat.png,Rat,unknown,White,Red,tacecaps,Snake Escape,2023,gamemaker,action|strategy
 leaper.png,Rift Leaper MC,unknown,None,Black,tacecaps,Rift Leaper,2024,gamemaker,platformer
 morning_knight.png,Knight Antivirus,other,None,None,tacecaps,Morning Star,2023,gamemaker,action|roguelike
@@ -69,3 +69,18 @@ virin.png,Virin,female,Black,Purple,tacecaps,Infinite Horizon,2022,gamemaker,act
 yorimi.png,Yorimi,female,Blonde,Orange,tacecaps,Infinite Horizon,2022,gamemaker,action|adventure|rpg
 purgatory_man.png,Purgatory Chase MC,male,Brown,None,pancakeey,Purgatory Chase,2020,gamemaker,platformer
 death.png,Death,unknown,Unknown,Unknown,pancakeey,Purgatory Chase,2020,gamemaker,platformer
+mizuko.png,Mizuko,female,Green,Purple,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+eiko.png,Eiko,female,Purple,Purple,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+koriko.png,Koriko,female,Blue,Blue,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+bouka.png,Bouka,female,Red,Pink,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+goomie.png,Goomie,female,Green,Green,slayervictor|tacecaps,Descendia Remastered|Pocket Waifu,2020,gamemaker,action|adventure|rpg|gacha|idle
+shizeko.png,Shizeko,female,Brown,Green,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+shoko.png,Shoko,female,Brown,Brown,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+celeste.png,Celeste,female,Blue,Blue,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+wattan.png,Wattan,female,Red,Red,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+yui.png,Yui,female,Brown,Green,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+kaede.png,Kaede,female,White,Red,tacecaps,Sw1tch|Pocket Waifu,2022,gamemaker,platformer|gacha|idle
+suou.png,Suou,female,Pink,Red,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+azusa_pw.png,Azusa,female,Blonde,Blue,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+shippo.png,Shippo,female,Orange,Blue,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle
+homura.png,Homura,female,Orange,Orange,tacecaps,Pocket Waifu,2022,gamemaker,gacha|idle

@@ -69,7 +69,9 @@ enum Genre {
   rhythm('Rhythm'),
   tool('Tool'),
   sandbox('Sandbox'),
-  shooter('Shooter');
+  shooter('Shooter'),
+  gacha('Gacha'),
+  idle('Idle');
 
   const Genre(this.displayName);
 
