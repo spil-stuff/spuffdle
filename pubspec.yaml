@@ -24,4 +24,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/quiz_elements.csv
+    - assets/data/games.csv
     - assets/images/

@@ -560,25 +560,28 @@ class QuizElementCategoryWidgetState<T>
         borderRadius: BorderRadius.circular(4.0),
       ),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:
-              (widget.category.value is List
-                      ? widget.category.value as List
-                      : [widget.category.value])
-                  .map(
-                    (item) => FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        item == null ? 'N/A' : item.toString(),
-                        maxLines: 1,
-                        softWrap: false,
-                        textAlign: TextAlign.center,
-                        style: AppStyles.whiteText,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                (widget.category.value is List
+                        ? widget.category.value as List
+                        : [widget.category.value])
+                    .map(
+                      (item) => FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          item == null ? 'N/A' : item.toString(),
+                          maxLines: 1,
+                          softWrap: false,
+                          textAlign: TextAlign.center,
+                          style: AppStyles.whiteText,
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+          ),
         ),
       ),
     );

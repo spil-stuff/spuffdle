@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'dart:convert';
+
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:collection/collection.dart';
+
 import 'constants.dart';
 
 enum Gender {
@@ -170,6 +172,20 @@ class Quiz {
   bool completed = false;
 }
 
+class Game {
+  const Game({
+    required this.developers,
+    required this.year,
+    required this.engine,
+    required this.genres,
+  });
+
+  final List<Developer> developers;
+  final int year;
+  final List<Engine> engine;
+  final List<Genre> genres;
+}
+
 class AsyncProvider with ChangeNotifier {
   static const String _dailyProgressKey = 'dailyQuizProgress';
 
@@ -183,111 +199,120 @@ class AsyncProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      final gameContents = await rootBundle.loadString('assets/data/games.csv');
+      final gameRows = _decodeCsvRows(gameContents, 'Games');
+      final gameByName = <String, Game>{};
+      for (var rowIndex = 0; rowIndex < gameRows.length; rowIndex++) {
+        final rowNumber = rowIndex + 2;
+        final values = gameRows[rowIndex];
+        final name = _requiredCsvValue(values, 'name', 'Games', rowNumber);
+        if (gameByName.containsKey(name)) {
+          throw FormatException(
+            'Games CSV row $rowNumber duplicates game "$name".',
+          );
+        }
+
+        final yearText = _requiredCsvValue(values, 'year', 'Games', rowNumber);
+        final year = int.tryParse(yearText);
+        if (year == null) {
+          throw FormatException(
+            'Games CSV row $rowNumber has an invalid year: $yearText.',
+          );
+        }
+
+        gameByName[name] = Game(
+          developers: _csvEnumValues(
+            values,
+            'developers',
+            Developer.values,
+            'Games',
+            rowNumber,
+          ),
+          year: year,
+          engine: _csvEnumValues(
+            values,
+            'engine',
+            Engine.values,
+            'Games',
+            rowNumber,
+          ),
+          genres: _csvEnumValues(
+            values,
+            'genres',
+            Genre.values,
+            'Games',
+            rowNumber,
+          ),
+        );
+      }
+
+      if (gameByName.isEmpty) {
+        throw const FormatException('Games CSV has no data rows.');
+      }
+
       final csvContents = await rootBundle.loadString(
         'assets/data/quiz_elements.csv',
       );
-      final rows = csv.decode(csvContents);
-
-      if (rows.isEmpty) {
-        throw const FormatException('Quiz elements CSV is empty.');
-      }
-
-      final headers = rows.first
-          .map((header) => header.toString().trim().toLowerCase())
-          .toList();
-
+      final rows = _decodeCsvRows(csvContents, 'Quiz elements');
       final parsedElements = <QuizElement>[];
-      for (var rowIndex = 1; rowIndex < rows.length; rowIndex++) {
-        final row = rows[rowIndex];
-        if (row.length != headers.length) {
-          throw FormatException(
-            'Quiz elements CSV row ${rowIndex + 1} has ${row.length} '
-            'columns; expected ${headers.length}.',
-          );
-        }
-        final values = <String, String>{
-          for (var columnIndex = 0; columnIndex < headers.length; columnIndex++)
-            headers[columnIndex]: row[columnIndex].toString().trim(),
-        };
-
-        String requiredValue(String column) {
-          final value = values[column]!;
-          if (value.isEmpty) {
+      for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        final rowNumber = rowIndex + 2;
+        final values = rows[rowIndex];
+        final gameNames = _csvListValues(
+          values,
+          'games',
+          'Quiz elements',
+          rowNumber,
+        );
+        final associatedGames = gameNames.map((name) {
+          final game = gameByName[name];
+          if (game == null) {
             throw FormatException(
-              'Quiz elements CSV row ${rowIndex + 1} has an empty $column.',
+              'Quiz elements CSV row $rowNumber references unknown game '
+              '"$name".',
             );
           }
-          return value;
-        }
-
-        List<String> listValues(String column) {
-          final items = requiredValue(column)
-              .split('|')
-              .map((item) => item.trim())
-              .where((item) => item.isNotEmpty)
-              .toList();
-          if (items.isEmpty) {
-            throw FormatException(
-              'Quiz elements CSV row ${rowIndex + 1} has no $column values.',
-            );
-          }
-          return items;
-        }
-
-        T enumValue<T extends Enum>(String column, List<T> values) {
-          final value = requiredValue(column).toLowerCase();
-          for (final candidate in values) {
-            if (candidate.name == value) {
-              return candidate;
-            }
-          }
-          throw FormatException(
-            'Quiz elements CSV row ${rowIndex + 1} has an invalid $column: '
-            '$value.',
-          );
-        }
-
-        final yearText = requiredValue('year');
-        final year = int.tryParse(yearText);
-
+          return game;
+        }).toList();
         parsedElements.add(
           QuizElement(
-            imagePath: "assets/images/${requiredValue('image')}",
-            name: requiredValue('name'),
-            gender: enumValue('gender', Gender.values),
-            hairColor: requiredValue('hair'),
-            eyeColor: requiredValue('eye'),
-            developers: listValues('developers')
-                .map(
-                  (value) => _enumValueFromString(
-                    value,
-                    Developer.values,
-                    'developers',
-                    rowIndex,
-                  ),
-                )
+            imagePath:
+                "assets/images/${_requiredCsvValue(values, 'image', 'Quiz elements', rowNumber)}",
+            name: _requiredCsvValue(values, 'name', 'Quiz elements', rowNumber),
+            gender: _csvEnumValue(
+              values,
+              'gender',
+              Gender.values,
+              'Quiz elements',
+              rowNumber,
+            ),
+            hairColor: _requiredCsvValue(
+              values,
+              'hair',
+              'Quiz elements',
+              rowNumber,
+            ),
+            eyeColor: _requiredCsvValue(
+              values,
+              'eye',
+              'Quiz elements',
+              rowNumber,
+            ),
+            developers: associatedGames
+                .expand((game) => game.developers)
+                .toSet()
                 .toList(),
-            games: listValues('games'),
-            year: year,
-            engine: listValues('engine')
-                .map(
-                  (value) => _enumValueFromString(
-                    value,
-                    Engine.values,
-                    'engine',
-                    rowIndex,
-                  ),
-                )
+            games: gameNames,
+            year: associatedGames
+                .map((game) => game.year)
+                .reduce((a, b) => a < b ? a : b),
+            engine: associatedGames
+                .expand((game) => game.engine)
+                .toSet()
                 .toList(),
-            genres: listValues('genres')
-                .map(
-                  (value) => _enumValueFromString(
-                    value,
-                    Genre.values,
-                    'genres',
-                    rowIndex,
-                  ),
-                )
+            genres: associatedGames
+                .expand((game) => game.genres)
+                .toSet()
                 .toList(),
           ),
         );
@@ -309,11 +334,102 @@ class AsyncProvider with ChangeNotifier {
     }
   }
 
-  T _enumValueFromString<T extends Enum>(
+  List<Map<String, String>> _decodeCsvRows(String contents, String source) {
+    final rows = csv.decode(contents);
+    if (rows.isEmpty) {
+      throw FormatException('$source CSV is empty.');
+    }
+
+    final headers = rows.first
+        .map((header) => header.toString().trim().toLowerCase())
+        .toList();
+    final decodedRows = <Map<String, String>>[];
+    for (var rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+      final row = rows[rowIndex];
+      if (row.length != headers.length) {
+        throw FormatException(
+          '$source CSV row ${rowIndex + 1} has ${row.length} columns; '
+          'expected ${headers.length}.',
+        );
+      }
+      decodedRows.add({
+        for (var columnIndex = 0; columnIndex < headers.length; columnIndex++)
+          headers[columnIndex]: row[columnIndex].toString().trim(),
+      });
+    }
+    return decodedRows;
+  }
+
+  String _requiredCsvValue(
+    Map<String, String> values,
+    String column,
+    String source,
+    int rowNumber,
+  ) {
+    final value = values[column];
+    if (value == null || value.isEmpty) {
+      throw FormatException('$source CSV row $rowNumber has an empty $column.');
+    }
+    return value;
+  }
+
+  List<String> _csvListValues(
+    Map<String, String> values,
+    String column,
+    String source,
+    int rowNumber,
+  ) {
+    final items = _requiredCsvValue(values, column, source, rowNumber)
+        .split('|')
+        .map((item) => item.trim())
+        .where((item) => item.isNotEmpty)
+        .toList();
+    if (items.isEmpty) {
+      throw FormatException(
+        '$source CSV row $rowNumber has no $column values.',
+      );
+    }
+    return items;
+  }
+
+  List<T> _csvEnumValues<T extends Enum>(
+    Map<String, String> values,
+    String column,
+    List<T> candidates,
+    String source,
+    int rowNumber,
+  ) => _csvListValues(values, column, source, rowNumber)
+      .map(
+        (value) => _csvEnumValueFromString(
+          value,
+          candidates,
+          column,
+          source,
+          rowNumber,
+        ),
+      )
+      .toList();
+
+  T _csvEnumValue<T extends Enum>(
+    Map<String, String> values,
+    String column,
+    List<T> candidates,
+    String source,
+    int rowNumber,
+  ) => _csvEnumValueFromString(
+    _requiredCsvValue(values, column, source, rowNumber),
+    candidates,
+    column,
+    source,
+    rowNumber,
+  );
+
+  T _csvEnumValueFromString<T extends Enum>(
     String value,
     List<T> candidates,
     String column,
-    int rowIndex,
+    String source,
+    int rowNumber,
   ) {
     for (final candidate in candidates) {
       if (candidate.name == value.toLowerCase()) {
@@ -321,7 +437,7 @@ class AsyncProvider with ChangeNotifier {
       }
     }
     throw FormatException(
-      'Quiz elements CSV row ${rowIndex + 1} has an invalid $column: $value.',
+      '$source CSV row $rowNumber has an invalid $column: $value.',
     );
   }
 
