@@ -213,7 +213,7 @@ class QuizElementGuessingMenu extends StatefulWidget {
 }
 
 class _QuizElementGuessingMenuState extends State<QuizElementGuessingMenu> {
-  static const double _optionHeight = 48;
+  static const double _optionHeight = 80;
   static const int _maxVisibleOptions = 6;
 
   final TextEditingController _searchController = TextEditingController();
@@ -331,8 +331,8 @@ class _QuizElementGuessingMenuState extends State<QuizElementGuessingMenu> {
                                           ),
                                           child: Image.asset(
                                             element.imagePath,
-                                            width: 36,
-                                            height: 36,
+                                            width: 64,
+                                            height: 64,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
