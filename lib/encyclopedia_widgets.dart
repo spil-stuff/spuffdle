@@ -189,7 +189,7 @@ class EncyclopediaElementPage extends StatelessWidget {
 
                 return Flex(
                   direction: isNarrow ? Axis.vertical : Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: isNarrow ? MainAxisAlignment.start : MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Flexible(
@@ -207,7 +207,7 @@ class EncyclopediaElementPage extends StatelessWidget {
                         child: Text(
                           element.description ?? "No description!",
                           style: AppStyles.whiteText.copyWith(fontSize: 22),
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.start,
                         ),
                       ),
                     ),
