@@ -9,10 +9,13 @@ class EncyclopediaOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait = MediaQuery.orientationOf(context) == Orientation.portrait;
+    final crossAxisCount = isPortrait ? 3 : 7;
+
     return Center(
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
+          crossAxisCount: crossAxisCount,
           childAspectRatio: 0.75,
         ),
         itemCount: elements.length,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:spuffdle/encyclopedia_widgets.dart';
-
 import 'quiz_widgets.dart';
 import 'provider.dart';
 import 'constants.dart';
@@ -31,7 +30,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Messages',
+      title: 'spuffdle',
       theme: ThemeData(
         textSelectionTheme: const TextSelectionThemeData(
           selectionHandleColor: AppColors.highlightColor,
