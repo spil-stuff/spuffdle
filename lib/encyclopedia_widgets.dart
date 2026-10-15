@@ -19,26 +19,38 @@ class EncyclopediaOverviewPage extends StatelessWidget {
         ),
         itemCount: elements.length,
         itemBuilder: (context, index) {
-          return TextButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EncyclopediaPage(index: index, elements: elements),
+          return Container(
+              decoration: BoxDecoration(
+                color: AppColors.secondaryBackgroundColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(70.0),
+                  topRight: Radius.circular(70.0),
+                  bottomLeft: Radius.circular(16.0),
+                  bottomRight: Radius.circular(16.0)
+                ),
               ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16,),
-                  child: elements[index].image,
+              child: TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EncyclopediaPage(index: index, elements: elements),
+                  ),
                 ),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(elements[index].name, style: AppStyles.whiteText,),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(70.0,),
+                      child: elements[index].image,
+                    ),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(elements[index].name, style: AppStyles.whiteText,),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
           );
         },
       ),
@@ -170,6 +182,7 @@ class EncyclopediaElementPage extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(64.0, 0.0, 64.0, 64.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FittedBox(
             fit: BoxFit.scaleDown,
@@ -178,47 +191,53 @@ class EncyclopediaElementPage extends StatelessWidget {
               style: AppStyles.whiteText.copyWith(fontSize: 34),
             ),
           ),
-          const SizedBox(height: 16),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
               element.games.join(', '),
-              style: AppStyles.greyText.copyWith(fontSize: 24),
+              style: AppStyles.greyText.copyWith(fontSize: 22),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 32),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isNarrow = constraints.maxWidth < constraints.maxHeight || constraints.maxWidth < 600;
+            child: Container(
+              padding: const EdgeInsets.all(32.0),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryBackgroundColor,
+                borderRadius: BorderRadius.circular(64.0),
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isNarrow = constraints.maxWidth < constraints.maxHeight || constraints.maxWidth < 600;
 
-                return Flex(
-                  direction: isNarrow ? Axis.vertical : Axis.horizontal,
-                  mainAxisAlignment: isNarrow ? MainAxisAlignment.start : MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(24),
-                        child: element.image,
-                      ),
-                    ),
-                    SizedBox(
-                      width: isNarrow ? 0 : 16,
-                      height: isNarrow ? 16 : 0,
-                    ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        child: Text(
-                          element.description ?? "No description!",
-                          style: AppStyles.whiteText.copyWith(fontSize: 22),
-                          textAlign: TextAlign.start,
+                  return Flex(
+                    direction: isNarrow ? Axis.vertical : Axis.horizontal,
+                    mainAxisAlignment: isNarrow ? MainAxisAlignment.start : MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: element.image,
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                      SizedBox(
+                        width: 16,
+                        height: 32,
+                      ),
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            element.description ?? "No description!",
+                            style: AppStyles.whiteText.copyWith(fontSize: 22),
+                            textAlign: TextAlign.start,
+                          ),
+                          ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ],

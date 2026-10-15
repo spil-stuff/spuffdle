@@ -66,7 +66,7 @@ class QuizPageState extends State<QuizPage> {
                     "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
                     style: AppStyles.greyText
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(width: 8,),
                   SizedBox(
                     width: 40,
                     height: 40,
