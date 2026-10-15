@@ -46,3 +46,12 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Dev tools
+devtools_options.yaml
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugin_registrant.h
+windows/flutter/generated_plugins.cmake
+generated_plugin_registrant.cc
+generated_plugin_registrant.h
+generated_plugins.cmake
