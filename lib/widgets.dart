@@ -147,7 +147,7 @@ class QuizPageState extends State<QuizPage> {
                 ],
               ),
             ),
-            if (_quiz.completed) QuizElementWidget(quizElement: _quiz.answer),
+            if (_quiz.completed) QuizElementWidget(quizElement: _quiz.answer, answer: _quiz.answer),
             Expanded(
               child: guesses.isEmpty
                   ? const SizedBox.shrink()
@@ -173,6 +173,7 @@ class QuizPageState extends State<QuizPage> {
                           return QuizElementWidget(
                             key: ObjectKey(guess),
                             quizElement: guess,
+                            answer: _quiz.answer,
                             reveal: reveal,
                             onRevealStarted: reveal
                                 ? () => _pendingGuessReveals.remove(guess)
@@ -326,15 +327,12 @@ class _QuizElementGuessingMenuState extends State<QuizElementGuessingMenu> {
                                     ),
                                     child: Row(
                                       children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            4,
-                                          ),
-                                          child: Image.asset(
-                                            element.imagePath,
-                                            width: 64,
-                                            height: 64,
-                                            fit: BoxFit.cover,
+                                        SizedBox(
+                                          width: 64,
+                                          height: 64,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(4,),
+                                            child: element.image,
                                           ),
                                         ),
                                         const SizedBox(width: 10),
@@ -421,11 +419,13 @@ class QuizElementWidget extends StatefulWidget {
   const QuizElementWidget({
     super.key,
     required this.quizElement,
+    required this.answer,
     this.reveal = false,
     this.onRevealStarted,
   });
 
   final QuizElement quizElement;
+  final QuizElement answer;
   final bool reveal;
   final VoidCallback? onRevealStarted;
 
@@ -473,6 +473,8 @@ class _QuizElementWidgetState extends State<QuizElementWidget>
   Widget _category(int index, double width) {
     return QuizElementCategoryWidget(
       category: widget.quizElement.categories[index],
+      quizElement: widget.quizElement,
+      answer: widget.answer,
       width: width,
       revealAnimation: _hasStartedReveal ? _revealController : null,
       revealIndex: index,
@@ -536,12 +538,16 @@ class QuizElementImageWidgetState extends State<QuizElementImageWidget> {
 class QuizElementCategoryWidget<T> extends StatefulWidget {
   const QuizElementCategoryWidget({
     super.key,
+    required this.quizElement,
+    required this.answer,
     required this.category,
     required this.width,
     this.revealAnimation,
     this.revealIndex = 0,
   });
 
+  final QuizElement quizElement;
+  final QuizElement answer;
   final QuizElementCategory<T> category;
   final double width;
   final Animation<double>? revealAnimation;
@@ -570,8 +576,12 @@ class QuizElementCategoryWidgetState<T>
           fit: BoxFit.scaleDown,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children:
-                (widget.category.value is List
+            children: [
+                if(widget.category.value is int)
+                  (
+                    widget.quizElement.getYearDifferenceIcon(widget.answer.year) ?? SizedBox()
+                  ),
+                ...(widget.category.value is List
                         ? widget.category.value as List
                         : [widget.category.value])
                     .map(
@@ -585,8 +595,8 @@ class QuizElementCategoryWidgetState<T>
                           style: AppStyles.whiteText,
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
+            ],
           ),
         ),
       ),

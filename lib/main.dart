@@ -68,7 +68,11 @@ class MainAppState extends State<MainApp> {
         useMaterial3: true,
       ),
       home: asyncProvider.isLoading
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+          ? const Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: AppColors.primaryBackgroundColor,
+              body: Center(child: CircularProgressIndicator())
+            )
           : QuizPage(quiz: asyncProvider.dailyQuiz!, isDaily: true),
     );
   }

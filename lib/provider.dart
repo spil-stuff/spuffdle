@@ -162,6 +162,37 @@ class QuizElement {
       }
     }
   }
+
+  Icon? getYearDifferenceIcon(int? year) {
+    if(this.year == null || year == null) {
+      return null;
+    }
+    
+    int diff = year - this.year!;
+
+    if(diff == 0) return null;
+
+    IconData icon;
+
+    if(diff < 0) {
+      if(diff == -1) {
+        icon = Icons.keyboard_arrow_down;
+      }
+      else {
+        icon = Icons.keyboard_double_arrow_down;
+      }
+    }
+    else {
+      if(diff == 1) {
+        icon = Icons.keyboard_arrow_up;
+      }
+      else {
+        icon = Icons.keyboard_double_arrow_up;
+      }
+    }
+
+    return Icon(icon, color: AppColors.primaryColor);
+  }
 }
 
 class Quiz {
