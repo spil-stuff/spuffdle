@@ -128,23 +128,24 @@ class QuizPageState extends State<QuizPage> {
                     ),
             ),
             SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
-                QuizElementCategoryLabelWidget(label: 'Name', width: 200),
-                QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
-                QuizElementCategoryLabelWidget(
-                  label: 'Hair Colour',
-                  width: 100,
-                ),
-                QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
-                QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
-                QuizElementCategoryLabelWidget(label: 'Games', width: 200),
-                QuizElementCategoryLabelWidget(label: 'Year', width: 100),
-                QuizElementCategoryLabelWidget(label: 'Engine', width: 100),
-                QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
-              ],
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Name', width: 200),
+                  QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Hair Colour', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
+                  QuizElementCategoryLabelWidget(label: 'Games', width: 200),
+                  QuizElementCategoryLabelWidget(label: 'Year', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Engine', width: 100),
+                  QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
+                ],
+              ),
             ),
             if (_quiz.completed) QuizElementWidget(quizElement: _quiz.answer),
             Expanded(
@@ -480,20 +481,25 @@ class _QuizElementWidgetState extends State<QuizElementWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        QuizElementImageWidget(quizElement: widget.quizElement),
-        _category(0, 200),
-        _category(1, 100),
-        _category(2, 100),
-        _category(3, 100),
-        _category(4, 110),
-        _category(5, 200),
-        _category(6, 100),
-        _category(7, 100),
-        _category(8, 100),
-      ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          QuizElementImageWidget(quizElement: widget.quizElement),
+          _category(0, 200),
+          _category(1, 100),
+          _category(2, 100),
+          _category(3, 100),
+          _category(4, 110),
+          _category(5, 200),
+          _category(6, 100),
+          _category(7, 100),
+          _category(8, 100),
+        ],
+      ),
     );
   }
 }
