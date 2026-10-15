@@ -113,6 +113,7 @@ class QuizElement {
     required this.year,
     required this.engine,
     required this.genres,
+    required csvDescription,
   }) : categories = [
          QuizElementCategory<String>(name),
          QuizElementCategory<Gender>(gender),
@@ -123,7 +124,8 @@ class QuizElement {
          QuizElementCategory<int?>(year),
          QuizElementCategory<List<Engine>>(engine),
          QuizElementCategory<List<Genre>>(genres),
-       ];
+       ],
+       description = (csvDescription == "null" ? null : csvDescription);
 
   final String imagePath;
   final String name;
@@ -135,6 +137,7 @@ class QuizElement {
   final int? year;
   final List<Engine> engine;
   final List<Genre> genres;
+  final String? description;
 
   Image get image => Image.asset(imagePath, fit: BoxFit.cover);
 
@@ -201,6 +204,18 @@ class Quiz {
   QuizElement answer;
   List<QuizElement> guesses = [];
   bool completed = false;
+
+  void reroll(List<QuizElement> elements) {
+    answer = elements[Random().nextInt(elements.length)];
+    guesses.clear();
+    completed = false;
+  }
+
+  void updateAllMatches() {
+    for(QuizElement guess in guesses) {
+      guess.updateMatches(answer);
+    }
+  }
 }
 
 class Game {
@@ -345,6 +360,7 @@ class AsyncProvider with ChangeNotifier {
                 .expand((game) => game.genres)
                 .toSet()
                 .toList(),
+            csvDescription: _requiredCsvValue(values, 'description', 'Quiz elements', rowNumber)
           ),
         );
       }

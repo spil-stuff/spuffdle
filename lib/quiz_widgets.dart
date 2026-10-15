@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'provider.dart';
 import 'constants.dart';
 
@@ -16,17 +15,14 @@ class QuizPage extends StatefulWidget {
 
 class QuizPageState extends State<QuizPage> {
   final ScrollController _guessesScrollController = ScrollController();
-  late Quiz _quiz;
-  late bool _isDaily;
   late List<QuizElement> _shownGuesses;
   final Set<QuizElement> _pendingGuessReveals = {};
 
   @override
   void initState() {
     super.initState();
-    _quiz = widget.quiz;
-    _isDaily = widget.isDaily;
-    _shownGuesses = List<QuizElement>.of(_quiz.guesses);
+    widget.quiz.updateAllMatches();
+    _shownGuesses = List<QuizElement>.of(widget.quiz.guesses);
   }
 
   @override
@@ -38,12 +34,12 @@ class QuizPageState extends State<QuizPage> {
   Future<void> guess(QuizElement guess) async {
     final asyncProvider = Provider.of<AsyncProvider>(context, listen: false);
     final submission = asyncProvider.submitGuess(
-      _quiz,
+      widget.quiz,
       guess,
-      isDaily: _isDaily,
+      isDaily: widget.isDaily,
     );
 
-    if (!_quiz.completed) {
+    if (!widget.quiz.completed) {
       _shownGuesses.add(guess);
       _pendingGuessReveals.add(guess);
     }
@@ -52,170 +48,118 @@ class QuizPageState extends State<QuizPage> {
     await submission;
   }
 
-  void _selectGameMode(bool isDaily, {bool closeDrawer = true}) {
-    final provider = Provider.of<AsyncProvider>(context, listen: false);
-    setState(() {
-      _isDaily = isDaily;
-      _quiz = isDaily ? provider.dailyQuiz! : provider.createQuiz(false);
-      _shownGuesses = List<QuizElement>.of(_quiz.guesses);
-      _pendingGuessReveals.clear();
-    });
-    if (closeDrawer) {
-      Navigator.pop(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final asyncProvider = Provider.of<AsyncProvider>(context);
     final guesses = _shownGuesses.reversed.toList();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors.primaryBackgroundColor,
-      drawer: Drawer(
-        backgroundColor: AppColors.secondaryBackgroundColor,
-        child: SafeArea(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text('Game mode', style: AppStyles.whiteText),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.today, color: AppColors.primaryColor),
-                title: const Text('Daily mode', style: AppStyles.whiteText),
-                selected: _isDaily,
-                onTap: () => _selectGameMode(true),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.all_inclusive,
-                  color: AppColors.primaryColor,
-                ),
-                title: const Text('Infinite mode', style: AppStyles.whiteText),
-                selected: !_isDaily,
-                onTap: () => _selectGameMode(false),
-              ),
-            ],
-          ),
-        ),
-      ),
-      appBar: AppBar(
-        title: Text(
-          'spuffdle ${_isDaily ? "Daily" : "Infinite"}',
-          style: AppStyles.whiteText,
-        ),
-        backgroundColor: AppColors.primaryBackgroundColor,
-        iconTheme: IconThemeData(color: AppColors.primaryColor),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if(_isDaily)
-              SizedBox(
-                height: 64,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
-                      style: AppStyles.greyText
-                    ),
-                    SizedBox(width: 16,),
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20,),
-                        child: asyncProvider.getYesterdayAnswer().image,
-                      ),
-                    ),
-                  ]
-                ),
-              ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if(widget.isDaily)
             SizedBox(
-              width: 400,
-              child: _quiz.completed
-                  ? const SizedBox(height: 50)
-                  : QuizElementGuessingMenu(
-                      key: ValueKey(_isDaily),
-                      elements: asyncProvider.quizElements
-                          .where((element) => !_quiz.guesses.contains(element))
-                          .toList(),
-                      onSelected: guess,
-                    ),
-            ),
-            SizedBox(height: 10),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.center,
+              height: 64,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Name', width: 200),
-                  QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Hair Colour', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
-                  QuizElementCategoryLabelWidget(label: 'Games', width: 200),
-                  QuizElementCategoryLabelWidget(label: 'Year', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Engine', width: 100),
-                  QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
-                ],
-              ),
-            ),
-            if (_quiz.completed) QuizElementWidget(quizElement: _quiz.answer, answer: _quiz.answer),
-            Expanded(
-              child: guesses.isEmpty
-                  ? const SizedBox.shrink()
-                  : Scrollbar(
-                      controller: _guessesScrollController,
-                      thumbVisibility: true,
-                      child: ListView.builder(
-                        controller: _guessesScrollController,
-                        padding: const EdgeInsets.only(bottom: 8),
-                        itemCount: guesses.length,
-                        findChildIndexCallback: (key) {
-                          if (key is ObjectKey) {
-                            final index = guesses.indexWhere(
-                              (guess) => identical(guess, key.value),
-                            );
-                            return index == -1 ? null : index;
-                          }
-                          return null;
-                        },
-                        itemBuilder: (context, index) {
-                          final guess = guesses[index];
-                          final reveal = _pendingGuessReveals.contains(guess);
-                          return QuizElementWidget(
-                            key: ObjectKey(guess),
-                            quizElement: guess,
-                            answer: _quiz.answer,
-                            reveal: reveal,
-                            onRevealStarted: reveal
-                                ? () => _pendingGuessReveals.remove(guess)
-                                : null,
-                          );
-                        },
-                      ),
+                  Text(
+                    "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
+                    style: AppStyles.greyText
+                  ),
+                  SizedBox(width: 16,),
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20,),
+                      child: asyncProvider.getYesterdayAnswer().image,
                     ),
-            ),
-            if (_quiz.completed && !_isDaily)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: FilledButton.icon(
-                  onPressed: () => _selectGameMode(false, closeDrawer: false),
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('New character'),
-                ),
+                  ),
+                ]
               ),
-          ],
-        ),
+            ),
+          SizedBox(
+            width: 400,
+            child: widget.quiz.completed
+                ? const SizedBox(height: 50)
+                : QuizElementGuessingMenu(
+                    key: ValueKey(widget.isDaily),
+                    elements: asyncProvider.quizElements
+                        .where((element) => !widget.quiz.guesses.contains(element))
+                        .toList(),
+                    onSelected: guess,
+                  ),
+          ),
+          SizedBox(height: 10),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuizElementCategoryLabelWidget(label: 'Photo', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Name', width: 200),
+                QuizElementCategoryLabelWidget(label: 'Gender', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Hair Colour', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Eye Colour', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Developers', width: 110),
+                QuizElementCategoryLabelWidget(label: 'Games', width: 200),
+                QuizElementCategoryLabelWidget(label: 'Year', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Engine', width: 100),
+                QuizElementCategoryLabelWidget(label: 'Genres', width: 100),
+              ],
+            ),
+          ),
+          if (widget.quiz.completed) QuizElementWidget(quizElement: widget.quiz.answer, answer: widget.quiz.answer),
+          Expanded(
+            child: guesses.isEmpty
+                ? const SizedBox.shrink()
+                : Scrollbar(
+                    controller: _guessesScrollController,
+                    thumbVisibility: true,
+                    child: ListView.builder(
+                      controller: _guessesScrollController,
+                      padding: const EdgeInsets.only(bottom: 8),
+                      itemCount: guesses.length,
+                      findChildIndexCallback: (key) {
+                        if (key is ObjectKey) {
+                          final index = guesses.indexWhere(
+                            (guess) => identical(guess, key.value),
+                          );
+                          return index == -1 ? null : index;
+                        }
+                        return null;
+                      },
+                      itemBuilder: (context, index) {
+                        final guess = guesses[index];
+                        final reveal = _pendingGuessReveals.contains(guess);
+                        return QuizElementWidget(
+                          key: ObjectKey(guess),
+                          quizElement: guess,
+                          answer: widget.quiz.answer,
+                          reveal: reveal,
+                          onRevealStarted: reveal
+                              ? () => _pendingGuessReveals.remove(guess)
+                              : null,
+                        );
+                      },
+                    ),
+                  ),
+          ),
+          if (widget.quiz.completed && !widget.isDaily)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FilledButton.icon(
+                onPressed: () => setState(() {
+                  widget.quiz.reroll(asyncProvider.quizElements);
+                  _shownGuesses.clear();
+                  _pendingGuessReveals.clear();
+                }),
+                icon: const Icon(Icons.refresh),
+                label: const Text('New character'),
+              ),
+            ),
+        ],
       ),
     );
   }
