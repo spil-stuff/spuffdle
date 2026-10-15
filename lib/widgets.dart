@@ -115,6 +115,28 @@ class QuizPageState extends State<QuizPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            if(_isDaily)
+              SizedBox(
+                height: 64,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
+                      style: AppStyles.greyText
+                    ),
+                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20,),
+                        child: asyncProvider.getYesterdayAnswer().image,
+                      ),
+                    ),
+                  ]
+                ),
+              ),
             SizedBox(
               width: 400,
               child: _quiz.completed

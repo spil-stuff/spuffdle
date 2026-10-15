@@ -472,21 +472,31 @@ class AsyncProvider with ChangeNotifier {
     );
   }
 
+  QuizElement getTimeAnswer(DateTime time) {
+    final random = Random(time.year * 10000 + time.month * 100 + time.day);
+    return quizElements[random.nextInt(quizElements.length)];
+  }
+
   Quiz createQuiz(bool isDaily) {
     if (!isInitialized) {
       throw StateError('Quiz elements have not been loaded yet.');
     }
 
-    final random = isDaily
-        ? Random(
-            DateTime.now().year * 10000 +
-                DateTime.now().month * 100 +
-                DateTime.now().day,
-          )
-        : Random();
-
-    QuizElement answer = quizElements[random.nextInt(quizElements.length)];
+    QuizElement answer = isDaily
+      ? getTimeAnswer(DateTime.now())
+      : quizElements[Random().nextInt(quizElements.length)];
+    
     return Quiz(answer: answer);
+  }
+
+  QuizElement getYesterdayAnswer() {
+    if (!isInitialized) {
+      throw StateError('Quiz elements have not been loaded yet.');
+    }
+
+    DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
+
+    return getTimeAnswer(yesterday);
   }
 
   String _todayKey() {
