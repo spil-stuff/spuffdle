@@ -167,18 +167,24 @@ class EncyclopediaElementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(64.0, 0.0, 64.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(64.0, 0.0, 64.0, 64.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            element.name,
-            style: AppStyles.whiteText.copyWith(fontSize: 34),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              element.name,
+              style: AppStyles.whiteText.copyWith(fontSize: 34),
+            ),
           ),
           const SizedBox(height: 16),
-          Text(
-            element.games.join(', '),
-            style: AppStyles.greyText.copyWith(fontSize: 24),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              element.games.join(', '),
+              style: AppStyles.greyText.copyWith(fontSize: 24),
+            ),
           ),
           const SizedBox(height: 16),
           Expanded(
