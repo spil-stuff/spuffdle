@@ -108,7 +108,6 @@ class EncyclopediaPageState extends State<EncyclopediaPage> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // Main PageView
           PageView.builder(
             itemCount: widget.elements.length,
             controller: pageController,
@@ -168,7 +167,7 @@ class EncyclopediaElementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(64.0, 0.0, 64.0, 0.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
