@@ -176,6 +176,32 @@ class EncyclopediaElementPage extends StatelessWidget {
   final PageController pageController;
   final QuizElement element;
 
+  Widget _buildNameIsland() {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: AppColors.tertiaryColor,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              element.name,
+              style: AppStyles.whiteText.copyWith(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              element.games.join(', '),
+              style: AppStyles.greyText.copyWith(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -184,27 +210,12 @@ class EncyclopediaElementPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              element.name,
-              style: AppStyles.whiteText.copyWith(fontSize: 34),
-            ),
-          ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              element.games.join(', '),
-              style: AppStyles.greyText.copyWith(fontSize: 22),
-            ),
-          ),
-          const SizedBox(height: 32),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(32.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: AppColors.secondaryBackgroundColor,
-                borderRadius: BorderRadius.circular(64.0),
+                borderRadius: BorderRadius.circular(24.0),
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -212,27 +223,48 @@ class EncyclopediaElementPage extends StatelessWidget {
 
                   return Flex(
                     direction: isNarrow ? Axis.vertical : Axis.horizontal,
-                    mainAxisAlignment: isNarrow ? MainAxisAlignment.start : MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Flexible(
+                      if (isNarrow) _buildNameIsland(),
+                      if (isNarrow) const SizedBox(height: 24.0,),
+                      Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(16.0),
                           child: element.image,
                         ),
                       ),
-                      SizedBox(
-                        width: 16,
-                        height: 32,
+                      const SizedBox(
+                        width: 16.0,
+                        height: 24.0,
                       ),
-                      Flexible(
-                        child: SingleChildScrollView(
-                          child: Text(
-                            element.description ?? "No description!",
-                            style: AppStyles.whiteText.copyWith(fontSize: 22),
-                            textAlign: TextAlign.start,
-                          ),
-                          ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (!isNarrow) _buildNameIsland(),
+                            if (!isNarrow) const SizedBox(height: 24.0,),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.tertiaryColor,
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                padding: const EdgeInsets.all(12.0),
+                                child: SingleChildScrollView(
+                                  child: Center(
+                                    child:Text(
+                                      element.description ?? "No description!",
+                                      style: AppStyles.whiteText.copyWith(fontSize: 19.0),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );

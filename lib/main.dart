@@ -48,6 +48,19 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryBackgroundColor),
         useMaterial3: true,
       ),
+      builder: (context, child) {
+        final mediaQueryData = MediaQuery.of(context);
+        return MediaQuery(
+          data: mediaQueryData.copyWith(
+            // Keeps text between 80% and 100% of normal size
+            textScaler: mediaQueryData.textScaler.clamp(
+              minScaleFactor: 0.8,
+              maxScaleFactor: 1.0, 
+            ),
+          ),
+          child: child!,
+        );
+      },
       home: const HomePage(),
     );
   }
