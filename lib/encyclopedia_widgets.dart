@@ -154,45 +154,66 @@ class EncyclopediaPageState extends State<EncyclopediaPage> {
 }
 
 class EncyclopediaElementPage extends StatelessWidget {
-  const EncyclopediaElementPage({super.key, required this.index, required this.pageController, required this.element});
+  const EncyclopediaElementPage({
+    super.key,
+    required this.index,
+    required this.pageController,
+    required this.element,
+  });
 
   final int index;
   final PageController pageController;
   final QuizElement element;
-  
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             element.name,
-            style: AppStyles.whiteText.copyWith(fontSize: 34,),
+            style: AppStyles.whiteText.copyWith(fontSize: 34),
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16),
           Text(
             element.games.join(', '),
-            style: AppStyles.greyText.copyWith(fontSize: 24,),
+            style: AppStyles.greyText.copyWith(fontSize: 24),
           ),
-          SizedBox(height: 16,),
-          Flexible(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: SizedBox(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24,),
-                      child: element.image,
+          const SizedBox(height: 16),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isNarrow = constraints.maxWidth < constraints.maxHeight || constraints.maxWidth < 600;
+
+                return Flex(
+                  direction: isNarrow ? Axis.vertical : Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: element.image,
+                      ),
                     ),
-                  ),
-                ),
-                Center(
-                  child: Text(element.description ?? "No description!", style: AppStyles.whiteText.copyWith(fontSize: 22,),),
-                ),
-              ],
+                    SizedBox(
+                      width: isNarrow ? 0 : 16,
+                      height: isNarrow ? 16 : 0,
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Text(
+                          element.description ?? "No description!",
+                          style: AppStyles.whiteText.copyWith(fontSize: 22),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],
