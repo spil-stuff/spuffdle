@@ -229,9 +229,20 @@ class EncyclopediaElementPage extends StatelessWidget {
                       if (isNarrow) _buildNameIsland(),
                       if (isNarrow) const SizedBox(height: 24.0,),
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16.0),
-                          child: element.image,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return SizedBox(
+                                width: constraints.maxWidth.clamp(0.0, 512.0),
+                                height: constraints.maxHeight.clamp(0.0, 512.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  child: element.image,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(
