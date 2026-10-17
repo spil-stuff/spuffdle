@@ -63,22 +63,32 @@ class QuizPageState extends State<QuizPage> {
             SizedBox(
               height: 64,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  const SizedBox(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
+                        style: AppStyles.greyText
+                      ),
+                      SizedBox(width: 8,),
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20,),
+                          child: asyncProvider.getYesterdayAnswer().image,
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
-                    "Yesterday's character: ${asyncProvider.getYesterdayAnswer().name}",
-                    style: AppStyles.greyText
+                    "Guesses: ${widget.quiz.guesses.length + (widget.quiz.completed ? 1 : 0)}",
+                    style: AppStyles.greyText.copyWith(fontSize: 13,),
                   ),
-                  SizedBox(width: 8,),
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20,),
-                      child: asyncProvider.getYesterdayAnswer().image,
-                    ),
-                  ),
-                ]
+                ],
               ),
             ),
           SizedBox(
