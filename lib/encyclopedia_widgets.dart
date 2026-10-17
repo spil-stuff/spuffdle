@@ -176,9 +176,11 @@ class EncyclopediaElementPage extends StatelessWidget {
   final PageController pageController;
   final QuizElement element;
 
+  static const double spacing = 8.0;
+
   Widget _buildNameIsland() {
     return Container(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(spacing),
       decoration: BoxDecoration(
         color: AppColors.tertiaryColor,
         borderRadius: BorderRadius.circular(16.0),
@@ -205,17 +207,17 @@ class EncyclopediaElementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(64.0, 0.0, 64.0, 16.0),
+      padding: const EdgeInsets.fromLTRB(spacing * 4, 0.0, spacing * 4, spacing),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(spacing),
               decoration: BoxDecoration(
                 color: AppColors.secondaryBackgroundColor,
-                borderRadius: BorderRadius.circular(24.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -227,7 +229,7 @@ class EncyclopediaElementPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (isNarrow) _buildNameIsland(),
-                      if (isNarrow) const SizedBox(height: 24.0,),
+                      if (isNarrow) const SizedBox(height: spacing,),
                       Expanded(
                         child: Align(
                           alignment: Alignment.center,
@@ -246,8 +248,8 @@ class EncyclopediaElementPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        width: 16.0,
-                        height: 24.0,
+                        width: spacing,
+                        height: spacing,
                       ),
                       Expanded(
                         child: Column(
@@ -255,14 +257,14 @@ class EncyclopediaElementPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             if (!isNarrow) _buildNameIsland(),
-                            if (!isNarrow) const SizedBox(height: 24.0,),
+                            if (!isNarrow) const SizedBox(height: spacing,),
                             Expanded(
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: AppColors.tertiaryColor,
                                   borderRadius: BorderRadius.circular(16.0),
                                 ),
-                                padding: const EdgeInsets.all(24.0),
+                                padding: const EdgeInsets.all(spacing * 2),
                                 child: SingleChildScrollView(
                                   child: Center(
                                     child:Text(
