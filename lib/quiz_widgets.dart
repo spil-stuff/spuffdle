@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider.dart';
 import 'constants.dart';
+import 'package:pasteboard/pasteboard.dart';
+import 'package:intl/intl.dart';
+import 'package:another_flushbar/another_flushbar.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key, required this.quiz, required this.isDaily});
@@ -157,6 +160,33 @@ class QuizPageState extends State<QuizPage> {
                 }),
                 icon: const Icon(Icons.refresh),
                 label: const Text('New character'),
+              ),
+            ),
+          if (widget.quiz.completed && widget.isDaily)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FilledButton.icon(
+                onPressed: () => setState(() {
+                  String formattedDate = DateFormat('MM/dd/yyyy').format(widget.quiz.date);
+                  String pastable = "spuffdle $formattedDate in ${widget.quiz.guesses.length + 1} guesses\n\n";
+
+                  pastable += widget.quiz.getPastable();
+
+                  Pasteboard.writeText(pastable);
+
+                  Flushbar(
+                    backgroundColor: const Color.fromARGB(219, 226, 249, 255),
+                    messageColor: AppColors.primaryBackgroundColor,
+                    message: "Copied to clipboard!",
+                    duration: const Duration(seconds: 3),
+                    maxWidth: 200,
+                    flushbarPosition: FlushbarPosition.TOP,
+                    margin: const EdgeInsets.all(12.0),
+                    borderRadius: BorderRadius.circular(100.0),
+                  ).show(context);
+                }),
+                icon: const Icon(Icons.share),
+                label: const Text('Share'),
               ),
             ),
         ],

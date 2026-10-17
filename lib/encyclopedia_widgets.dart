@@ -262,7 +262,7 @@ class EncyclopediaElementPage extends StatelessWidget {
                                   color: AppColors.tertiaryColor,
                                   borderRadius: BorderRadius.circular(16.0),
                                 ),
-                                padding: const EdgeInsets.all(12.0),
+                                padding: const EdgeInsets.all(24.0),
                                 child: SingleChildScrollView(
                                   child: Center(
                                     child:Text(

@@ -1,12 +1,10 @@
 import 'dart:math';
 import 'dart:convert';
-
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:collection/collection.dart';
-
 import 'constants.dart';
 
 enum Gender {
@@ -84,13 +82,14 @@ enum Genre {
 }
 
 enum QuizElementCategoryMatch {
-  no(AppColors.red),
-  partial(AppColors.yellow),
-  yes(AppColors.green);
+  no(AppColors.red, "🟥"),
+  partial(AppColors.yellow, "🟨"),
+  yes(AppColors.green, "🟩");
 
-  const QuizElementCategoryMatch(this.color);
+  const QuizElementCategoryMatch(this.color, this.pastableSquare);
 
   final Color color;
+  final String pastableSquare;
 }
 
 class QuizElementCategory<T> {
@@ -196,10 +195,22 @@ class QuizElement {
 
     return Icon(icon, color: AppColors.primaryColor);
   }
+
+  String getPastable() {
+    String pastable = "";
+
+    for(QuizElementCategory cat in categories) {
+      pastable += cat.matches.pastableSquare;
+    }
+
+    return pastable;
+  }
 }
 
 class Quiz {
-  Quiz({required this.answer});
+  Quiz({required this.answer, required this.date});
+
+  final DateTime date;
 
   QuizElement answer;
   List<QuizElement> guesses = [];
@@ -215,6 +226,20 @@ class Quiz {
     for(QuizElement guess in guesses) {
       guess.updateMatches(answer);
     }
+  }
+
+  String getPastable() {
+    List<String> pastables = [];
+
+    for(QuizElement guess in guesses) {
+      pastables.add(guess.getPastable());
+    }
+    
+    if(completed) {
+      pastables.add(answer.getPastable());
+    }
+
+    return pastables.reversed.join("\n");
   }
 }
 
@@ -320,6 +345,7 @@ class AsyncProvider with ChangeNotifier {
           }
           return game;
         }).toList();
+
         parsedElements.add(
           QuizElement(
             imagePath:
@@ -502,7 +528,7 @@ class AsyncProvider with ChangeNotifier {
       ? getTimeAnswer(DateTime.now())
       : quizElements[Random().nextInt(quizElements.length)];
     
-    return Quiz(answer: answer);
+    return Quiz(answer: answer, date: DateTime.now());
   }
 
   QuizElement getYesterdayAnswer() {
@@ -543,7 +569,7 @@ class AsyncProvider with ChangeNotifier {
           );
         }
 
-        final quiz = Quiz(answer: answer.first);
+        final quiz = Quiz(answer: answer.first, date: DateTime.now());
         final savedGuesses = decoded['guesses'];
         if (savedGuesses is! List) {
           throw const FormatException('Saved daily quiz guesses are invalid.');
